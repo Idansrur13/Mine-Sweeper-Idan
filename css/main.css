@@ -1,0 +1,13 @@
+.cell {
+
+    border: 1px solid firebrick;
+    text-align: center;
+    font-size: x-large;
+    height: 40px;
+    width: 40px;
+
+}
+
+.cell:hover {
+    background-color: #b76565;
+}
