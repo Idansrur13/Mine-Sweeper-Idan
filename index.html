@@ -9,10 +9,49 @@
     <title>ערב טוב ספרינט 1</title>
 </head>
 
-<body onload="onInit()">
-    <h1>Mine Sweeper</h1>
-    <div class="mainBoard"></div>
-    <h2>Idan Srur</h2>
+<body onload="onInit()" onkeypress="clickedRender(key)" oncontextmenu="clickedRender()">
+    <img src="img/image.png" alt="">
+
+
+    <div class="content">
+        <h1>Mission: Mine Sweeper</h1>
+        <div class="stats">
+            <div class="divStats">
+                <p>Time:</p>
+                <span class="time">00:00</span>
+            </div>
+            <div class="divStats">
+                <p>Protection:</p>
+                <div class="shilds">
+                </div>
+            </div>
+            <div class="divStats">
+                <p>Detected mines:</p>
+                <span class="Detected">0</span>
+            </div>
+        </div>
+        <div class="setting">
+            <button onclick="changeSize(4)">4/4</button>
+            <button onclick="changeSize(8)">8/8</button>
+            <button onclick="changeSize(12)">12/12</button>
+        </div>
+        <div class="mainBoard"></div>
+        <div class="popNewGame">
+            <h2>Game Over</h2>
+            <button onclick="changeSize(4)">4/4</button>
+            <button onclick="changeSize(8)">8/8</button>
+            <button onclick="changeSize(12)">12/12</button>
+            <span>⌛️</span>
+            <button onclick="onInit()">play again 🪖</button>
+            <span></span>
+            <p>GG</p>
+        </div>
+        <button onclick="openPop()">pause 🪖</button>
+
+        <h2>Idan Srur</h2>
+
+    </div>
+
 
     <script src="js/main.js"></script>
 </body>

@@ -1,13 +1,140 @@
-.cell {
+body {
+    font-family: "Inter";
+    background: #889188;
+    place-items: center;
+    color: #e4f1b4;
+}
 
-    border: 1px solid firebrick;
+img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+}
+
+.content {
+    background-color: #3a4a2f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-self: center;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+    padding: 40px;
     text-align: center;
-    font-size: x-large;
-    height: 40px;
-    width: 40px;
+    border: 1px solid #6b7d52;
+    gap: 20px;
+    border-radius: 16px;
+    box-shadow: 3px 2px 1px rgba(64, 78, 49, 0.698);
 
 }
 
+.stats {
+    display: flex;
+    gap: 20px;
+}
+
+.divStats {
+    padding-bottom: 10px;
+    width: 150px;
+    background-color: #46573a;
+    border: 1px solid #6b7d52;
+    padding: 12px;
+    box-shadow: 1px 1px 3px #d5dbd5a9;
+}
+
+.shilds {
+    display: flex;
+    gap: 10px;
+    border: 1px solid #6b7d52;
+    height: 20px;
+    align-items: center;
+    border-radius: 10px;
+    padding: 4px 6px;
+    background-color: #3b4c33;
+}
+
+.life {
+    background-color: #c7d36f;
+    height: 100%;
+    width: 20px;
+    border-radius: 8px;
+    border: 1px solid #6b7d52;
+}
+
+
+
+.mainBoard {
+    border: 1px solid #6b7d52;
+    border-radius: 6px;
+    padding: 5px;
+    background-color: #3a4a2f;
+
+}
+
+
+.cell {
+    border: 1px solid #6b7d52;
+    text-align: center;
+
+
+    font-size: x-large;
+    height: 40px;
+    width: 40px;
+    border-radius: 2px;
+    background-color: #4a5b3a;
+    color: #f5f3e0;
+}
+
 .cell:hover {
-    background-color: #b76565;
+    background-color: #819969;
+}
+
+.cell:active {
+    background-color: #343d2c;
+}
+
+button {
+    border: 3px #c7d36f;
+    font-size: large;
+    background-color: #8b9850;
+    box-shadow: 2px 2px 2px rgb(156, 165, 88);
+    border-radius: 3px;
+    padding: 8px 16px;
+    color: #e4f1b4;
+    margin-left: 10px;
+}
+
+button:hover {
+    border: 3px #f2fba8;
+    background-color: #bfcd80;
+    box-shadow: 2px 2px 2px rgb(156, 165, 88);
+}
+
+h1 {
+    font-size: xxx-large;
+    margin: 0%;
+}
+
+p {
+    font-size: 22px;
+    margin: 10px 0px;
+}
+
+span {
+    font-size: x-large;
+    font-weight: 800;
+    color: #6fcd5e;
+
+}
+
+.popNewGame {
+    position: absolute;
+    display: none;
+
+    gap: 10px;
+    justify-self: center;
+    background-color: #417e2f;
+    padding: 20px 50px;
 }
