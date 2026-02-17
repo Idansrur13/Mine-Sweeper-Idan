@@ -5,15 +5,23 @@ function setMinesNegsCount(celPos) {
     currBoard.isMine = true
     const minesAround = neighborCount(newCellPos)
     currBoard.minesAroundCound += minesAround
+    gGame.minesArr.push(newCellPos)
+  }
+}
 
-    console.log(gBoard)
+function oxplodeMine() {
+  var currMinePos = gGame.minesArr.shift()
+  renderCell(currMinePos, MINE)
+  if (gGame.minesArr.length === 0) {
+    clearInterval(explodeInt)
+    // openPop()
   }
 }
 
 function getEmptyCell(celPos) {
   var m = getRandomIntInclusive(0, gLevel.size - 1)
   var r = getRandomIntInclusive(0, gLevel.size - 1)
-  while (m === celPos.i && r === celPos.j) {
+  while (gBoard[m][r].isMine === true || gBoard[m][r].isRevealed === true) {
     m = getRandomIntInclusive(0, gLevel.size - 1)
     r = getRandomIntInclusive(0, gLevel.size - 1)
   }
@@ -44,7 +52,7 @@ function renderBoard() {
       // const currBoard = gBoard[i][j]
       let elCell = EMPTY
 
-      strHtml += `<td oncontextmenu="onCellRightClicked(this, ${i}, ${j})" onclick="onCellClicked(this, ${i}, ${j})" class="cell cell-${i}-${j}">${elCell}</td>`
+      strHtml += `<td oncontextmenu="onCellRightClicked(${i}, ${j})" onclick="onCellClicked(this, ${i}, ${j})" class="cell cell-${i}-${j}">${elCell}</td>`
     }
 
     strHtml += '</tr>'
@@ -73,25 +81,33 @@ function neighborCount(celPos) {
 function renderLife() {
   var shild = document.querySelector('.shilds')
   shild.innerHTML = ''
-  console.log(gLevel.lives)
   for (let i = 0; i < gLevel.lives; i++) {
     shild.innerHTML += '<div class="life"></div>'
   }
 }
 
+function renderHint() {
+  var hintsLeft = document.querySelector('.hintsLeft')
+  hintsLeft.innerHTML = ''
+  for (let i = 0; i < gLevel.hints; i++) {
+    hintsLeft.innerHTML += '<div class="hint"></div>'
+  }
+}
+
 function renderCell(cell, render) {
   var elCell = document.querySelector(`.cell-${cell.i}-${cell.j}`)
-
   elCell.innerText = render
 }
 
-function startTime() {
+function startTime(time) {
   gGame.secsPassed += 1
   const minutes = Math.floor(gGame.secsPassed / 60)
   const seconds = gGame.secsPassed % 60
   const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
   const elTime = document.querySelector('.time')
   if (elTime) elTime.innerText = formatted
+  time = formatted
+  return time
 }
 
 function renderSoldierPic(type) {

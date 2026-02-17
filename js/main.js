@@ -7,6 +7,18 @@ const EMPTY = ''
 const EMPTYSLOT = '🔰'
 const FLAG = '⛳️'
 
+// settings
+var isHitsOn = true
+
+// timers
+var explodeInt
+var gemeTimer
+
+// local storage
+var StatsTimeArr = localStorage.getItem('prevWinsTime')
+var StatsLeftMinesArr = localStorage.getItem('leftMines')
+var StatsLevelArr = localStorage.getItem('level')
+
 const pointAudio = new Audio('audio/universfield-game-bonus-02-294436.mp3')
 
 // imgssss
@@ -14,8 +26,6 @@ const happySrc = 'img/soldiers/7.svg'
 const winSrc = 'img/soldiers/8.svg'
 const scaredSrc = 'img/soldiers/9.svg'
 const lossSrc = 'img/soldiers/10.svg'
-
-var gemeTimer
 
 var gBoardStatic = {
   minesAroundCound: 4,
@@ -28,6 +38,7 @@ var gLevel = {
   size: 4,
   mines: 2,
   lives: 1,
+  hints: 1,
 }
 
 var gGame = {
@@ -43,12 +54,38 @@ function onInit(size = 4) {
   renderSoldierPic(happySrc)
   resetSetting(size)
   renderLife()
+  renderHint()
   buildBoard()
   renderBoard()
+  setPrivStats()
+}
+
+function setPrivStats() {
+  var tdStats = document.querySelector('.tdStats')
+
+  tdStats.innerHTML = ''
+
+  if (!StatsTimeArr) return
+  var stlitTime = StatsTimeArr.split(',')
+  var splitLevel = StatsLevelArr.split(',')
+  var splitMines = StatsLeftMinesArr.split(',')
+
+  for (let i = 0; i < stlitTime.length; i++) {
+    if (stlitTime[i] === 'null') continue
+    if (stlitTime[i] === '') continue
+    console.log(stlitTime[i], 'time', splitLevel, 'level', splitMines, 'mines')
+
+    tdStats.innerHTML += `<td>${stlitTime[i]}</td>
+    <td>${splitLevel[i]}</td>
+    <td>${splitMines[i]}</td>`
+  }
 }
 
 function resetSetting(size = 4) {
   const time = document.querySelector('.time')
+  const headBoard = document.querySelector('.headBoard')
+
+  headBoard.hidden = true
   time.innerText = '00:00'
   gGame = {
     isStart: true,
@@ -63,10 +100,12 @@ function resetSetting(size = 4) {
     size: 4,
     mines: 2,
     lives: 1,
+    hints: 1,
   }
   gBoard = []
   changeSize(size)
   clearInterval(gemeTimer)
+  clearInterval(explodeInt)
 }
 
 function stepBoom(cellPos) {
@@ -79,6 +118,63 @@ function stepBoom(cellPos) {
   if (gLevel.lives === 0) {
     gameOver()
   }
+}
+
+function checkWin() {
+  const headBoard = document.querySelector('.headBoard')
+  const totalMines = document.querySelector('.totalMinesTd')
+  const level = document.querySelector('.levelTd')
+  const time = document.querySelector('.timeTd')
+  var timeFormated = startTime(gGame.secsPassed)
+
+  const revalCon = gGame.revealedCount
+  const markedFlag = gGame.markedCount
+  const leftMines = gLevel.mines - gGame.explodedMines
+  console.log(
+    'revalCon',
+    revalCon,
+    'markedFlag',
+    markedFlag,
+    'leftMines',
+    leftMines,
+  )
+
+  if (revalCon === leftMines && revalCon === markedFlag && revalCon > 0) {
+    renderSoldierPic(winSrc)
+
+    headBoard.innerText = 'you Winn 🥇🏆🏅'
+    headBoard.hidden = false
+    totalMines.innerText = gLevel.mines
+    level.innerText = gLevel.size
+    time.innerText = timeFormated
+
+    // save stats
+    // save stats
+    var timeFormated = startTime(gGame.secsPassed)
+    StatsTimeArr += ',' + timeFormated
+    StatsLeftMinesArr += ',' + leftMines
+    StatsLevelArr += ',' + gLevel.size
+
+    localStorage.setItem('prevWinsTime', StatsTimeArr)
+    localStorage.setItem('level', StatsLevelArr)
+    localStorage.setItem('leftMines', StatsLeftMinesArr)
+  }
+}
+
+function gameOver() {
+  const headBoard = document.querySelector('.headBoard')
+  const totalMines = document.querySelector('.totalMinesTd')
+  const leftMine = document.querySelector('.levelTd')
+  const leftMines = gLevel.mines - gGame.explodedMines
+
+  headBoard.hidden = false
+  headBoard.innerText = 'you loose 💩🤡'
+  totalMines.innerText = gLevel.mines
+  leftMine.innerText = leftMines
+
+  renderSoldierPic(lossSrc)
+
+  explodeInt = setInterval(oxplodeMine, 700)
 }
 
 function expandReveal(cell) {

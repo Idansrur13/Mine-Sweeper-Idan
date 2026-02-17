@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/board.css">
     <link rel="stylesheet" href="css/txt.css">
@@ -28,12 +27,13 @@
                 </div>
             </div>
             <div class="divStats">
-                <p>Detected mines:</p>
-                <span class="Detected">0</span>
+                <p>Hints:</p>
+                <div class="hintsLeft"></div>
             </div>
         </div>
         <div class="setting">
             <button onclick="openPop()" class="pause">settings 🪖</button>
+            <button onclick="useHint()" class="pause">Use Hint 🛟</button>
 
             <button onclick="onInit(4)">4/4
                 <img class="levelImg" src="img/chevron-military-svgrepo-com (2).svg" alt="eg">
@@ -49,31 +49,50 @@
 
         </div>
         <div onclick="onInit()">
+
             <div class="soldier">
 
             </div>
 
 
         </div>
+        <h2 class="headBoard">Game Over</h2>
+
 
         <div class="mainBoard"></div>
         <div class="popNewGame">
-            <h2 class="headPop">Game Over</h2>
-            <div>
-                <span class="totalMines"></span>
-                <span class="leftMine"></span>
-                <span class=""></span>
-            </div>
+            <h2>settings ⚛️</h2>
+            <button type="submit" onclick="onInit()">play again 🪖</button>
+
+            <span>⌛️</span>
+
             <button onclick="onInit(4)">4/4</button>
             <button onclick="onInit(8)">8/8</button>
             <button onclick="onInit(12)">12/12</button>
-            <span>⌛️</span>
-            <button onclick="onInit()">play again 🪖</button>
+            <span>🧟</span>
+            <div class="buttonsPop">
+                <button class="musicToggle" onclick="musicToggle()">🎵</button>
+                <button class="hintToggle" onclick="hintToggle()">🛟</button>
+                <button class="timeToggle" onclick="timeToggle()">🕐</button>
+
+            </div>
             <span></span>
             <p>GG</p>
         </div>
 
         <h2>Idan Srur</h2>
+        <table class="tableStats">
+            <thead>
+                <tr>
+                    <td>Time:</td>
+                    <td>level:</td>
+                </tr>
+            </thead>
+            <tbody class="tdStats">
+
+
+            </tbody>
+        </table>
 
     </div>
 

@@ -1,31 +1,28 @@
-var explodeInt
-
 function onCellClicked(elCell, i, j) {
   if (gLevel.lives === 0) return
   var celPos = { i, j }
+  gBoard[i][j].isRevealed = true
+
   if (gGame.isStart) {
     gGame.isStart = false
     setMinesNegsCount(celPos)
     gemeTimer = setInterval(startTime, 1000)
   }
   checkCell(celPos)
+  console.log(gBoard)
 }
 
 function onCellRightClicked(i, j) {
-  if (gLevel.lives === 0) return
+  console.log(i, j, 'asdgasrg')
+  if (gLevel.lives === 0 || gGame.isStar) return
 
-  const alDetectedMine = document.querySelector('.Detected')
   event.preventDefault()
   var celPos = { i, j }
-  var cellVal = gBoard[i][j]
 
-  if (gGame.isStart) {
-    return
-  }
+  var cellVal = gBoard[i][j]
 
   if (!cellVal.isMark) {
     gGame.markedCount++
-    alDetectedMine.innerText = gGame.markedCount
     renderCell(celPos, FLAG)
     cellVal.isMark = true
     renderSoldierPic(scaredSrc)
@@ -54,12 +51,10 @@ function checkCell(cellPos) {
   if (currCell.isMine) {
     renderCell(cellPos, MINE)
     stepBoom(cellPos)
-    renderSoldierPic(scaredSrc)
   } else if (minesCount > 0) {
     renderCell(cellPos, minesCount)
     renderSoldierPic(happySrc)
     // pointAudio.play()
-    return
   } else {
     expandReveal(cellPos)
     renderCell(cellPos, EMPTYSLOT)
@@ -68,48 +63,17 @@ function checkCell(cellPos) {
   checkWin()
 }
 
-function checkWin() {
-  const headingPop = document.querySelector('.headPop')
-  const totalMines = document.querySelector('.totalMines')
-  const leftMine = document.querySelector('.leftMine')
+function useHint() {
+  if (gLevel.hints === 0 || gGame.isStart) return
+  gLevel.hints--
 
-  const revalCon = gGame.revealedCount
-  const markedFlag = gGame.markedCount
-  const leftMines = gGame.explodedMines - gLevel.mines
+  var freeCell = getEmptyCell()
+  var currBoard = gBoard[freeCell.i][freeCell.j]
+  renderCell(freeCell, currBoard.minesAroundCound)
 
-  if (revalCon === leftMines && revalCon === markedFlag && revalCon > 0) {
-    setTimeout(openPop, 4000)
-    renderSoldierPic(winSrc)
-
-    headingPop.innerText = 'you Winn 🥇🏆🏅'
-    totalMines.innerText = gLevel.mines
-    leftMine.innerText = leftMines
-  }
-}
-
-function gameOver() {
-  const headingPop = document.querySelector('.headPop')
-  const totalMines = document.querySelector('.totalMines')
-  const leftMine = document.querySelector('.leftMine')
-  const leftMines = gGame.explodedMines - gLevel.mines
-
-  headingPop.innerText = 'you loose 💩🤡'
-  totalMines.innerText = gLevel.mines
-  leftMine.innerText = leftMines
-
-  renderSoldierPic(lossSrc)
-
-  explodeInt = setInterval(oxplodeMine, 700)
-}
-
-function oxplodeMine() {
-  var currMinePos = gGame.minesArr.shift()
-  renderCell(currMinePos, MINE)
-  if (gGame.minesArr.length === 0) {
-    console.log(gGame.minesArr)
-    clearInterval(explodeInt)
-    openPop()
-  }
+  renderHint()
+  currBoard.isRevealed = true
+  setTimeout(() => renderCell(freeCell, EMPTY), 1000)
 }
 
 function changeSize(size) {
@@ -118,10 +82,14 @@ function changeSize(size) {
   if (size >= 8) lives += 1
   if (size >= 12) lives += 1
 
+  var hints = 1
+  if (size >= 8) hints += 1
+  if (size >= 12) hints += 1
+
   gLevel = {
-    size: size,
+    size,
     mines: size,
-    minesArr: [],
-    lives: lives,
+    lives,
+    hints,
   }
 }

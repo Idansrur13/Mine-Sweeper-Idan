@@ -29,6 +29,28 @@
     background-color: #3b4c33;
 }
 
+
+.hintsLeft {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    border: 1px solid #6b7d52;
+    height: 30px;
+    align-items: center;
+    border-radius: 10px;
+    padding: 8px 6px;
+    background-color: #3b4c33;
+}
+
+
+.hint {
+    background-color: #f0ff6b;
+    height: 100%;
+    width: 20px;
+    border-radius: 100%;
+    border: 2px solid #50a25b;
+}
+
 .life {
     background-color: #3946d0;
     height: 100%;
