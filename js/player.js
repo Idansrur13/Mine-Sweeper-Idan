@@ -1,6 +1,10 @@
 function onCellClicked(elCell, i, j) {
   if (gLevel.lives === 0) return
   var celPos = { i, j }
+  if (gGame.isManualMine) {
+    placeManualMines(celPos)
+    return
+  }
   gBoard[i][j].isRevealed = true
 
   if (gGame.isStart) {
@@ -9,11 +13,9 @@ function onCellClicked(elCell, i, j) {
     gemeTimer = setInterval(startTime, 1000)
   }
   checkCell(celPos)
-  console.log(gBoard)
 }
 
 function onCellRightClicked(i, j) {
-  console.log(i, j, 'asdgasrg')
   if (gLevel.lives === 0 || gGame.isStar) return
 
   event.preventDefault()
@@ -91,5 +93,46 @@ function changeSize(size) {
     mines: size,
     lives,
     hints,
+  }
+}
+
+function manualPosMine() {
+  var elPlaceMine = document.querySelector('.placeMine')
+  console.log('isManual', gGame.isManualMine)
+  if (gGame.isManualMine) {
+    gGame.isManualMine = false
+
+    elPlaceMine.innerText = 'place mines'
+    startManualGame()
+  } else {
+    onInit()
+    gGame.isStart = false
+    elPlaceMine.innerText = 'stop'
+    gGame.isManualMine = true
+    console.log('onInit workkkk', gGame.isManualMine)
+  }
+}
+
+function placeManualMines(cellPos) {
+  var currCell = gBoard[cellPos.i][cellPos.j]
+  if (currCell.isMine) {
+    console.log('alredy got one there')
+    return
+  }
+  if (gLevel.mines === gGame.minesArr.length) {
+    console.log('Max Mines')
+    return
+  }
+  gGame.minesArr.push(cellPos)
+  console.log(gLevel.mines, gGame.minesArr)
+  renderCell(cellPos, MINE)
+  currCell.isMine = true
+  neighborCount(cellPos)
+}
+
+function startManualGame() {
+  for (let i = 0; i < gGame.minesArr.length; i++) {
+    const currMinePos = gGame.minesArr[i]
+    renderCell(currMinePos, EMPTY)
   }
 }

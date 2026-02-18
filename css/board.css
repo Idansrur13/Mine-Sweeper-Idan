@@ -9,12 +9,14 @@
 }
 
 .divStats {
-    padding-bottom: 10px;
+    padding-bottom: 6px;
     width: 150px;
-    background-color: #46573a;
+    background-color: #505e45;
     border: 1px solid #6b7d52;
     padding: 12px;
     box-shadow: 1px 1px 3px #d5dbd5a9;
+    border-radius: 10px;
+
 }
 
 .shilds {
@@ -81,6 +83,8 @@
     border-radius: 2px;
     background-color: #4a5b3a;
     color: #f5f3e0;
+    cursor: pointer;
+
 }
 
 .cell:hover {

@@ -22,6 +22,7 @@ body {
 .soldierPic {
     height: 80px;
     width: 80px;
+    cursor: pointer;
 
 }
 
@@ -56,6 +57,8 @@ button {
     border-radius: 5px;
     padding: 4px 8px;
     color: #e4f1b4;
+    cursor: pointer;
+
 }
 
 
@@ -70,7 +73,9 @@ button:hover {
 .popNewGame {
     position: absolute;
     display: none;
-    animation: fadeIn 3s ease-out forwards;
+    border-radius: 10px;
+
+    animation: fadeIn 2s ease-out forwards;
     gap: 10px;
     justify-self: center;
     background-color: #417e2f;
@@ -83,10 +88,17 @@ button:hover {
     gap: 10px;
 }
 
-td {
-    border: 1px solid #e4f1b4;
-    padding: 6px;
+.tdStats {
+    /* border: 1px solid #e4f1b4; */
+    padding: 6px 20px;
+    border-bottom: 1px solid #f2fba8;
+
+
 }
+
+
+
+
 
 
 @keyframes fadeIn {

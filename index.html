@@ -33,7 +33,8 @@
         </div>
         <div class="setting">
             <button onclick="openPop()" class="pause">settings 🪖</button>
-            <button onclick="useHint()" class="pause">Use Hint 🛟</button>
+            <button onclick="useHint()" class="pause">Hint 🛟</button>
+            <button onclick="manualPosMine()" class="placeMine">place mines</button>
 
             <button onclick="onInit(4)">4/4
                 <img class="levelImg" src="img/chevron-military-svgrepo-com (2).svg" alt="eg">
@@ -51,8 +52,8 @@
         <div onclick="onInit()">
 
             <div class="soldier">
-
             </div>
+            <span class="numManualMine"></span>
 
 
         </div>
@@ -69,13 +70,7 @@
             <button onclick="onInit(4)">4/4</button>
             <button onclick="onInit(8)">8/8</button>
             <button onclick="onInit(12)">12/12</button>
-            <span>🧟</span>
-            <div class="buttonsPop">
-                <button class="musicToggle" onclick="musicToggle()">🎵</button>
-                <button class="hintToggle" onclick="hintToggle()">🛟</button>
-                <button class="timeToggle" onclick="timeToggle()">🕐</button>
 
-            </div>
             <span></span>
             <p>GG</p>
         </div>
@@ -84,11 +79,12 @@
         <table class="tableStats">
             <thead>
                 <tr>
-                    <td>Time:</td>
-                    <td>level:</td>
+                    <td class="tdStats">Time:</td>
+                    <td class="tdStats">Mines:</td>
+                    <td class="tdStats">level:</td>
                 </tr>
             </thead>
-            <tbody class="tdStats">
+            <tbody class="trStats">
 
 
             </tbody>

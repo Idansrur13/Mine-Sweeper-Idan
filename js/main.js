@@ -9,6 +9,9 @@ const FLAG = '⛳️'
 
 // settings
 var isHitsOn = true
+var isMusicOn = false
+isHitsOn = localStorage.getItem('withHints')
+isMusicOn = localStorage.getItem('withMusic')
 
 // timers
 var explodeInt
@@ -43,6 +46,7 @@ var gLevel = {
 
 var gGame = {
   isStart: false,
+  isManualMine: false,
   minesArr: [],
   revealedCount: 0,
   explodedMines: 0,
@@ -50,7 +54,7 @@ var gGame = {
   secsPassed: 0,
 }
 
-function onInit(size = 4) {
+function onInit(size = gLevel.size) {
   renderSoldierPic(happySrc)
   resetSetting(size)
   renderLife()
@@ -60,28 +64,7 @@ function onInit(size = 4) {
   setPrivStats()
 }
 
-function setPrivStats() {
-  var tdStats = document.querySelector('.tdStats')
-
-  tdStats.innerHTML = ''
-
-  if (!StatsTimeArr) return
-  var stlitTime = StatsTimeArr.split(',')
-  var splitLevel = StatsLevelArr.split(',')
-  var splitMines = StatsLeftMinesArr.split(',')
-
-  for (let i = 0; i < stlitTime.length; i++) {
-    if (stlitTime[i] === 'null') continue
-    if (stlitTime[i] === '') continue
-    console.log(stlitTime[i], 'time', splitLevel, 'level', splitMines, 'mines')
-
-    tdStats.innerHTML += `<td>${stlitTime[i]}</td>
-    <td>${splitLevel[i]}</td>
-    <td>${splitMines[i]}</td>`
-  }
-}
-
-function resetSetting(size = 4) {
+function resetSetting(size) {
   const time = document.querySelector('.time')
   const headBoard = document.querySelector('.headBoard')
 
@@ -89,6 +72,7 @@ function resetSetting(size = 4) {
   time.innerText = '00:00'
   gGame = {
     isStart: true,
+    isManualMine: false,
     minesArr: [],
     revealedCount: 0,
     markedCount: 0,
@@ -122,31 +106,17 @@ function stepBoom(cellPos) {
 
 function checkWin() {
   const headBoard = document.querySelector('.headBoard')
-  const totalMines = document.querySelector('.totalMinesTd')
-  const level = document.querySelector('.levelTd')
-  const time = document.querySelector('.timeTd')
   var timeFormated = startTime(gGame.secsPassed)
 
   const revalCon = gGame.revealedCount
   const markedFlag = gGame.markedCount
   const leftMines = gLevel.mines - gGame.explodedMines
-  console.log(
-    'revalCon',
-    revalCon,
-    'markedFlag',
-    markedFlag,
-    'leftMines',
-    leftMines,
-  )
 
   if (revalCon === leftMines && revalCon === markedFlag && revalCon > 0) {
     renderSoldierPic(winSrc)
 
     headBoard.innerText = 'you Winn 🥇🏆🏅'
     headBoard.hidden = false
-    totalMines.innerText = gLevel.mines
-    level.innerText = gLevel.size
-    time.innerText = timeFormated
 
     // save stats
     // save stats
@@ -163,13 +133,11 @@ function checkWin() {
 
 function gameOver() {
   const headBoard = document.querySelector('.headBoard')
-  const totalMines = document.querySelector('.totalMinesTd')
   const leftMine = document.querySelector('.levelTd')
   const leftMines = gLevel.mines - gGame.explodedMines
 
   headBoard.hidden = false
   headBoard.innerText = 'you loose 💩🤡'
-  totalMines.innerText = gLevel.mines
   leftMine.innerText = leftMines
 
   renderSoldierPic(lossSrc)

@@ -78,6 +78,26 @@ function neighborCount(celPos) {
   return count
 }
 
+function setPrivStats() {
+  var trStats = document.querySelector('.trStats')
+
+  trStats.innerHTML = ''
+
+  if (!StatsTimeArr) return
+  var stlitTime = StatsTimeArr.split(',')
+  var splitLevel = StatsLevelArr.split(',')
+  var splitMines = StatsLeftMinesArr.split(',')
+
+  for (let i = 0; i < stlitTime.length; i++) {
+    if (stlitTime[i] === 'null') continue
+    if (stlitTime[i] === '') continue
+
+    trStats.innerHTML += `<td >${stlitTime[i]}</td>
+    <td >${splitLevel[i]}</td>
+    <td >${splitMines[i]}</td>`
+  }
+}
+
 function renderLife() {
   var shild = document.querySelector('.shilds')
   shild.innerHTML = ''
