@@ -119,17 +119,6 @@ function renderCell(cell, render) {
   elCell.innerText = render
 }
 
-function startTime(time) {
-  gGame.secsPassed += 1
-  const minutes = Math.floor(gGame.secsPassed / 60)
-  const seconds = gGame.secsPassed % 60
-  const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-  const elTime = document.querySelector('.time')
-  if (elTime) elTime.innerText = formatted
-  time = formatted
-  return time
-}
-
 function renderSoldierPic(type) {
   const pic = document.querySelector('.soldier')
   pic.innerHTML = `<img class="soldierPic" src=${type} alt=${type}>`

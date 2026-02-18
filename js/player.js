@@ -16,7 +16,7 @@ function onCellClicked(elCell, i, j) {
 }
 
 function onCellRightClicked(i, j) {
-  if (gLevel.lives === 0 || gGame.isStar) return
+  if (gLevel.lives === 0 || gGame.isStart) return
 
   event.preventDefault()
   var celPos = { i, j }
@@ -30,7 +30,6 @@ function onCellRightClicked(i, j) {
     renderSoldierPic(scaredSrc)
   } else {
     gGame.markedCount--
-    alDetectedMine.innerText = gGame.markedCount
     renderCell(celPos, EMPTY)
     cellVal.isMark = false
   }
@@ -104,12 +103,12 @@ function manualPosMine() {
 
     elPlaceMine.innerText = 'place mines'
     startManualGame()
+    gemeTimer = setInterval(startTime, 1000)
   } else {
     onInit()
     gGame.isStart = false
     elPlaceMine.innerText = 'stop'
     gGame.isManualMine = true
-    console.log('onInit workkkk', gGame.isManualMine)
   }
 }
 

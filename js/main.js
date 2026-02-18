@@ -106,7 +106,6 @@ function stepBoom(cellPos) {
 
 function checkWin() {
   const headBoard = document.querySelector('.headBoard')
-  var timeFormated = startTime(gGame.secsPassed)
 
   const revalCon = gGame.revealedCount
   const markedFlag = gGame.markedCount
@@ -114,14 +113,18 @@ function checkWin() {
 
   if (revalCon === leftMines && revalCon === markedFlag && revalCon > 0) {
     renderSoldierPic(winSrc)
+    clearInterval(gemeTimer)
 
     headBoard.innerText = 'you Winn 🥇🏆🏅'
     headBoard.hidden = false
 
     // save stats
-    // save stats
-    var timeFormated = startTime(gGame.secsPassed)
-    StatsTimeArr += ',' + timeFormated
+    // time
+    const minutes = Math.floor(gGame.secsPassed / 60)
+    const seconds = gGame.secsPassed % 60
+    const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+
+    StatsTimeArr += ',' + formatted
     StatsLeftMinesArr += ',' + leftMines
     StatsLevelArr += ',' + gLevel.size
 
@@ -133,14 +136,12 @@ function checkWin() {
 
 function gameOver() {
   const headBoard = document.querySelector('.headBoard')
-  const leftMine = document.querySelector('.levelTd')
-  const leftMines = gLevel.mines - gGame.explodedMines
 
   headBoard.hidden = false
   headBoard.innerText = 'you loose 💩🤡'
-  leftMine.innerText = leftMines
 
   renderSoldierPic(lossSrc)
+  clearInterval(gemeTimer)
 
   explodeInt = setInterval(oxplodeMine, 700)
 }
@@ -162,8 +163,10 @@ function expandReveal(cell) {
         expandReveal(currCell)
       } else if (boardMinesAr === 0) {
         renderCell(currCell, EMPTYSLOT)
+        currBoard.isRevealed = true
       } else {
         renderCell(currCell, boardMinesAr)
+        currBoard.isRevealed = true
       }
     }
   }
@@ -173,4 +176,15 @@ function getRandomIntInclusive(min, max) {
   const minCeiled = Math.ceil(min)
   const maxFloored = Math.floor(max)
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled)
+}
+
+function startTime(time) {
+  gGame.secsPassed += 1
+  const minutes = Math.floor(gGame.secsPassed / 60)
+  const seconds = gGame.secsPassed % 60
+  const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+  const elTime = document.querySelector('.time')
+  if (elTime) elTime.innerText = formatted
+  time = formatted
+  return time
 }
