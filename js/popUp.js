@@ -5,5 +5,5 @@ function closePop() {
 function openPop() {
   var pop = document.querySelector('.popNewGame')
   pop.style.display = 'grid'
-  setTimeout(gemeTimer)
+  setTimeout(gTimerIntervalId)
 }

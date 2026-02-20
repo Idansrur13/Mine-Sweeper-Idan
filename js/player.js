@@ -10,7 +10,7 @@ function onCellClicked(elCell, i, j) {
   if (gGame.isStart) {
     gGame.isStart = false
     setMinesNegsCount(celPos)
-    gemeTimer = setInterval(startTime, 1000)
+    gTimerIntervalId = setInterval(startTime, 1000)
   }
   checkCell(celPos)
 }
@@ -23,11 +23,13 @@ function onCellRightClicked(i, j) {
 
   var cellVal = gBoard[i][j]
 
+  if (cellVal.isRevealed) return
+
   if (!cellVal.isMark) {
     gGame.markedCount++
     renderCell(celPos, FLAG)
     cellVal.isMark = true
-    renderSoldierPic(scaredSrc)
+    renderSoldierImg(scaredImgUrl)
   } else {
     gGame.markedCount--
     renderCell(celPos, EMPTY)
@@ -54,12 +56,12 @@ function checkCell(cellPos) {
     stepBoom(cellPos)
   } else if (minesCount > 0) {
     renderCell(cellPos, minesCount)
-    renderSoldierPic(happySrc)
+    renderSoldierImg(happyImgUrl)
     // pointAudio.play()
   } else {
     expandReveal(cellPos)
     renderCell(cellPos, EMPTYSLOT)
-    renderSoldierPic(happySrc)
+    renderSoldierImg(happyImgUrl)
   }
   checkWin()
 }
@@ -103,7 +105,7 @@ function manualPosMine() {
 
     elPlaceMine.innerText = 'place mines'
     startManualGame()
-    gemeTimer = setInterval(startTime, 1000)
+    gTimerIntervalId = setInterval(startTime, 1000)
   } else {
     onInit()
     gGame.isStart = false

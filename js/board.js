@@ -13,7 +13,7 @@ function oxplodeMine() {
   var currMinePos = gGame.minesArr.shift()
   renderCell(currMinePos, MINE)
   if (gGame.minesArr.length === 0) {
-    clearInterval(explodeInt)
+    clearInterval(gExplodeIntervalId)
     // openPop()
   }
 }
@@ -83,10 +83,10 @@ function setPrivStats() {
 
   trStats.innerHTML = ''
 
-  if (!StatsTimeArr) return
-  var stlitTime = StatsTimeArr.split(',')
-  var splitLevel = StatsLevelArr.split(',')
-  var splitMines = StatsLeftMinesArr.split(',')
+  if (!statsTimeArr) return
+  var stlitTime = statsTimeArr.split(',')
+  var splitLevel = statsLevelArr.split(',')
+  var splitMines = statsLeftMinesArr.split(',')
 
   for (let i = 0; i < stlitTime.length; i++) {
     if (stlitTime[i] === 'null') continue
@@ -119,7 +119,7 @@ function renderCell(cell, render) {
   elCell.innerText = render
 }
 
-function renderSoldierPic(type) {
+function renderSoldierImg(type) {
   const pic = document.querySelector('.soldier')
   pic.innerHTML = `<img class="soldierPic" src=${type} alt=${type}>`
 }

@@ -7,28 +7,22 @@ const EMPTY = ''
 const EMPTYSLOT = '🔰'
 const FLAG = '⛳️'
 
-// settings
-var isHitsOn = true
-var isMusicOn = false
-isHitsOn = localStorage.getItem('withHints')
-isMusicOn = localStorage.getItem('withMusic')
-
 // timers
-var explodeInt
-var gemeTimer
+var gExplodeIntervalId
+var gTimerIntervalId
 
 // local storage
-var StatsTimeArr = localStorage.getItem('prevWinsTime')
-var StatsLeftMinesArr = localStorage.getItem('leftMines')
-var StatsLevelArr = localStorage.getItem('level')
+var statsTimeArr = localStorage.getItem('prevWinsTime')
+var statsLeftMinesArr = localStorage.getItem('leftMines')
+var statsLevelArr = localStorage.getItem('level')
 
 const pointAudio = new Audio('audio/universfield-game-bonus-02-294436.mp3')
 
 // imgssss
-const happySrc = 'img/soldiers/7.svg'
-const winSrc = 'img/soldiers/8.svg'
-const scaredSrc = 'img/soldiers/9.svg'
-const lossSrc = 'img/soldiers/10.svg'
+const happyImgUrl = 'img/soldiers/7.svg'
+const winImgUrl = 'img/soldiers/8.svg'
+const scaredImgUrl = 'img/soldiers/9.svg'
+const lossImgUrl = 'img/soldiers/10.svg'
 
 var gBoardStatic = {
   minesAroundCound: 4,
@@ -55,7 +49,7 @@ var gGame = {
 }
 
 function onInit(size = gLevel.size) {
-  renderSoldierPic(happySrc)
+  renderSoldierImg(happyImgUrl)
   resetSetting(size)
   renderLife()
   renderHint()
@@ -88,14 +82,15 @@ function resetSetting(size) {
   }
   gBoard = []
   changeSize(size)
-  clearInterval(gemeTimer)
-  clearInterval(explodeInt)
+  clearInterval(gTimerIntervalId)
+  clearInterval(gExplodeIntervalId)
 }
 
 function stepBoom(cellPos) {
   var elCell = document.querySelector(`.cell-${cellPos.i}-${cellPos.j}`)
   gLevel.lives--
   gGame.explodedMines++
+  renderSoldierImg(scaredImgUrl)
   elCell.style.backgroundColor = '#c93e3eff'
   renderLife()
 
@@ -112,8 +107,8 @@ function checkWin() {
   const leftMines = gLevel.mines - gGame.explodedMines
 
   if (revalCon === leftMines && revalCon === markedFlag && revalCon > 0) {
-    renderSoldierPic(winSrc)
-    clearInterval(gemeTimer)
+    renderSoldierImg(winImgUrl)
+    clearInterval(gTimerIntervalId)
 
     headBoard.innerText = 'you Winn 🥇🏆🏅'
     headBoard.hidden = false
@@ -124,13 +119,13 @@ function checkWin() {
     const seconds = gGame.secsPassed % 60
     const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 
-    StatsTimeArr += ',' + formatted
-    StatsLeftMinesArr += ',' + leftMines
-    StatsLevelArr += ',' + gLevel.size
+    statsTimeArr += ',' + formatted
+    statsLeftMinesArr += ',' + leftMines
+    statsLevelArr += ',' + gLevel.size
 
-    localStorage.setItem('prevWinsTime', StatsTimeArr)
-    localStorage.setItem('level', StatsLevelArr)
-    localStorage.setItem('leftMines', StatsLeftMinesArr)
+    localStorage.setItem('prevWinsTime', statsTimeArr)
+    localStorage.setItem('level', statsLevelArr)
+    localStorage.setItem('leftMines', statsLeftMinesArr)
   }
 }
 
@@ -140,10 +135,10 @@ function gameOver() {
   headBoard.hidden = false
   headBoard.innerText = 'you loose 💩🤡'
 
-  renderSoldierPic(lossSrc)
-  clearInterval(gemeTimer)
+  renderSoldierImg(lossImgUrl)
+  clearInterval(gTimerIntervalId)
 
-  explodeInt = setInterval(oxplodeMine, 700)
+  gExplodeIntervalId = setInterval(oxplodeMine, 700)
 }
 
 function expandReveal(cell) {
@@ -151,22 +146,22 @@ function expandReveal(cell) {
     if (i < 0 || i >= gBoard.length) continue
     for (let j = cell.j - 1; j <= cell.j + 1; j++) {
       if (j < 0 || j >= gBoard[i].length) continue
-      var currCell = { i, j }
-      const currBoard = gBoard[i][j]
-      const boardMinesAr = currBoard.minesAroundCound
-      if (currBoard.isMine) return
+      var currPos = { i, j }
+      const currCell = gBoard[i][j]
+      const boardMinesAr = currCell.minesAroundCound
+      if (currCell.isMine) return
 
-      if (boardMinesAr === 0 && !currBoard.isRevealed) {
-        currBoard.isRevealed = true
+      if (boardMinesAr === 0 && !currCell.isRevealed) {
+        currCell.isRevealed = true
 
-        renderCell(currCell, EMPTYSLOT)
-        expandReveal(currCell)
+        renderCell(currPos, EMPTYSLOT)
+        expandReveal(currPos)
       } else if (boardMinesAr === 0) {
-        renderCell(currCell, EMPTYSLOT)
-        currBoard.isRevealed = true
+        renderCell(currPos, EMPTYSLOT)
+        currCell.isRevealed = true
       } else {
-        renderCell(currCell, boardMinesAr)
-        currBoard.isRevealed = true
+        renderCell(currPos, boardMinesAr)
+        currCell.isRevealed = true
       }
     }
   }
